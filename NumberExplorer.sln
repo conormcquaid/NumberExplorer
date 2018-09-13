@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberApp1", "NumberApp1\NumberApp1.csproj", "{FA2DD49E-CB78-4724-8233-C1F31768B3FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberExplorer", "NumberApp1\NumberExplorer.csproj", "{FA2DD49E-CB78-4724-8233-C1F31768B3FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
