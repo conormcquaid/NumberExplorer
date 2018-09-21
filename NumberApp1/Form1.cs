@@ -454,7 +454,7 @@ namespace NumberExplorer
             {
                 for (int cu = 0; cu < cubes.Count; cu++)
                 {
-                    int remnant = n - cubes[cu] * cubes[cu];
+                    int remnant = n - cubes[cu] * cubes[cu] * cubes[cu];
 
                     string s = IsSumOfTwoCubes(remnant, cu);
 
