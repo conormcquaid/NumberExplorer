@@ -1,4 +1,4 @@
-﻿namespace NumberApp1
+﻿namespace NumberExplorer
 {
     partial class AboutBox1
     {

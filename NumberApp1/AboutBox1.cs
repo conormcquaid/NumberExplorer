@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NumberApp1
+namespace NumberExplorer
 {
     partial class AboutBox1 : Form
     {

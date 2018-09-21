@@ -22,7 +22,7 @@ namespace NumberExplorer.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace NumberExplorer.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NumberExplorer.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace NumberExplorer.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace NumberExplorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap greenDots {
+        public static System.Drawing.Bitmap greenDots {
             get {
                 object obj = ResourceManager.GetObject("greenDots", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace NumberExplorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Icon1 {
+        public static System.Drawing.Icon Icon1 {
             get {
                 object obj = ResourceManager.GetObject("Icon1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -83,7 +83,7 @@ namespace NumberExplorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap jess1 {
+        public static System.Drawing.Bitmap jess1 {
             get {
                 object obj = ResourceManager.GetObject("jess1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -91,9 +91,19 @@ namespace NumberExplorer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] NumberExplorerHelp {
+            get {
+                object obj = ResourceManager.GetObject("NumberExplorerHelp", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap pinkDots {
+        public static System.Drawing.Bitmap pinkDots {
             get {
                 object obj = ResourceManager.GetObject("pinkDots", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

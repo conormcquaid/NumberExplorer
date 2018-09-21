@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 
-namespace NumberApp1
+namespace NumberExplorer
 {
     public partial class Form1 : Form
     {
@@ -19,17 +16,15 @@ namespace NumberApp1
         private List<int> squares;
         private List<int> cubes;
 
+        Settings settings = new Settings();
+        HelpForm helpForm;
+
         public Form1()
         {
             InitializeComponent();
 
             numericUpDown.Value = 39;
-
-            //Point p = numericUpDown.Location;
-            //p.X = this.Width - numericUpDown.Width / 2;
-
-            //richTextBox1.
-            
+  
         }
 
         private void NumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -37,8 +32,8 @@ namespace NumberApp1
             //MessageBox.Show("Changed value");
 
             //numericUpDown.Anchor = AnchorStyles.None;
-            Point p = numericUpDown.Location;
-            p.X = this.Width - numericUpDown.Width / 2;
+            //Point p = numericUpDown.Location;
+            //p.X = this.Width - numericUpDown.Width / 2;
 
             Calculate_all();
         }
@@ -144,6 +139,20 @@ namespace NumberApp1
             int root = (int)Math.Sqrt(n);
 
             if (n == root * root)
+            {
+                return root;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        private int Is_perfect_cube(int n)
+        {
+            int root = (int)Math.Pow(n, 1.0/3.0);
+
+            if (n == root * root * root)
             {
                 return root;
             }
@@ -331,19 +340,23 @@ namespace NumberApp1
 
             int root;
             root = Is_perfect_square(n);
-            if (root != 0)
+            if (root != 0 && settings.bSquare)
             {
                 richTextBox1.AppendText(String.Format("{1} is a perfect square with root {0}", root, n) + Environment.NewLine);
             }
-
+            root = Is_perfect_cube(n);
+            if (root != 0 && settings.bCube)
+            {
+                richTextBox1.AppendText(String.Format("{1} is a perfect cube with root {0}", root, n) + Environment.NewLine);
+            }
             if (!isPrime)
             {
                 Factorize(n);
 
                 StringBuilder sb = new StringBuilder();
-                foreach( int f in factors)
+                foreach (int f in factors)
                 {
-                    if(sb.Length == 0)
+                    if (sb.Length == 0)
                     {
                         sb.AppendFormat("{0}", f);
                     }
@@ -351,34 +364,49 @@ namespace NumberApp1
                     {
                         sb.AppendFormat(", {0}", f);
                     }
-                    
+
                 }
                 richTextBox1.AppendText("Factors are 1, " + sb + Environment.NewLine);
             }
 
-            int tri = IsTriangular(n);
-            if( tri != 0)
+            if (settings.bTri)
             {
-                richTextBox1.AppendText(string.Format("Is triangular number {0}", tri) + Environment.NewLine);
+                int tri = IsTriangular(n);
+                if (tri != 0)
+                {
+                    richTextBox1.AppendText(string.Format("Is triangular number {0}", tri) + Environment.NewLine);
+                }
             }
 
-            int pent = IsPentagonal(n);
-            if (pent != 0)
+            if (settings.bPent)
             {
-                richTextBox1.AppendText(string.Format("Is pentagonal number {0}", pent) + Environment.NewLine);
+                int pent = IsPentagonal(n);
+                if (pent != 0)
+                {
+                    richTextBox1.AppendText(string.Format("Is pentagonal number {0}", pent) + Environment.NewLine);
+                }
             }
 
-            int hex = IsHexagonal(n);
-            if (hex != 0)
+            if (settings.bHex)
             {
-                richTextBox1.AppendText(string.Format("Is hexagonal number {0}", hex) + Environment.NewLine);
+                int hex = IsHexagonal(n);
+                if (hex != 0)
+                {
+                    richTextBox1.AppendText(string.Format("Is hexagonal number {0}", hex) + Environment.NewLine);
+                }
             }
 
-            if (IsPerfect(n))
+            if (settings.bPerfect)
             {
-                richTextBox1.AppendText(string.Format("Is a perfect number") + Environment.NewLine);
+                if (IsPerfect(n))
+                {
+                    richTextBox1.AppendText(string.Format("Is a perfect number") + Environment.NewLine);
+                }
             }
 
+
+            // could be simpler just knowing largest square or cube root less than n, but...
+            // refactor later :)
             // list of squares, cubes less than n
             squares = new List<int>();
             cubes = new List<int>();
@@ -392,10 +420,14 @@ namespace NumberApp1
                 cubes.Add(x);
             }
 
-            richTextBox1.AppendText(IsSumOfTwoSquares(n));
+            if (settings.bSum2Cubes)
+            {
+                richTextBox1.AppendText(IsSumOfTwoSquares(n));
+            }
+            
 
             /// sum of three squares
-            if(squares.Count > 1)
+            if(settings.bSum3Squares && squares.Count > 1)
             {
                 for(int sq = 0; sq < squares.Count; sq++)
                 {
@@ -411,10 +443,14 @@ namespace NumberApp1
             }
 
             // two cubes
-            richTextBox1.AppendText(IsSumOfTwoCubes(n));
+            if (settings.bSum2Cubes)
+            {
+                richTextBox1.AppendText(IsSumOfTwoCubes(n));
+            }
+            
 
             // sum of three cubes
-            if (cubes.Count > 1)
+            if (settings.bSum3Cubes && cubes.Count > 1)
             {
                 for (int cu = 0; cu < cubes.Count; cu++)
                 {
@@ -428,22 +464,25 @@ namespace NumberApp1
                     }
                 }
             }
-            
+
             // repunits: try bases 2..16, look for simple patterns
 
-            for(int radix = 2; radix < 17; radix++)
+            if (settings.bRepunit)
             {
-                if (radix == 10) continue;// we already have this result :)
-
-                string s = DecimalToArbitrarySystem(n, radix);
-
-                if( s.Length > 2)
+                for (int radix = 2; radix < 17; radix++)
                 {
-                    string rep = new string(s.Substring(0, 1).ToCharArray()[0], s.Length);
+                    if (radix == 10) continue;// we already have this result :)
 
-                    if(s.Equals(rep))
+                    string s = DecimalToArbitrarySystem(n, radix);
+
+                    if (s.Length > 2)
                     {
-                        richTextBox1.AppendText(string.Format("In base {0} is {1}", radix, rep) + Environment.NewLine);
+                        string rep = new string(s.Substring(0, 1).ToCharArray()[0], s.Length);
+
+                        if (s.Equals(rep))
+                        {
+                            richTextBox1.AppendText(string.Format("In base {0} is {1}", radix, rep) + Environment.NewLine);
+                        }
                     }
                 }
             }
@@ -451,5 +490,65 @@ namespace NumberApp1
             richTextBox1.AppendText(Environment.NewLine);
             richTextBox1.ScrollToCaret();
         }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings.ShowDialog(this);
+            
+        }
+
+        private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // string
+            byte[] sst = GetEmbeddedResource("NumberExplorer.Resources.NumberExplorerHelp.pdf");
+
+            string temp = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "NEH.pdf");
+            //FileStream f = new FileStream(temp, FileMode.Create, FileAccess.ReadWrite);
+            //f.Write((byte[])sst.ToCharArray(), 0, sst.ToCharArray().Length);
+
+            if (!File.Exists(temp))
+            {
+                File.WriteAllBytes(temp, sst);
+               // File.WriteAllText(temp, sst);
+            }
+            helpForm = new HelpForm();
+
+            helpForm.axAcroPDF1.src = temp;
+            helpForm.Show();
+        }
+
+        // string
+        byte[] GetEmbeddedResource(string res)
+        {
+            var auxList = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
+
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(res);
+
+            BinaryReader r = new BinaryReader(stream);
+            
+
+            byte[] bytes = new byte[1024];
+            int ilen = r.Read(bytes, 0, 1024);
+            int totalLen = ilen;
+            while(ilen == 1024)
+            {
+                ilen = r.Read(bytes, 0, 1024);
+                totalLen += ilen;
+            }
+            stream.Position = 0;
+            
+            byte[] ret = new byte[totalLen];
+            r.Read(ret, 0, totalLen);
+            r.Dispose();
+
+            return ret;//;reader.ReadToEnd();
+            
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text = "";
+        }
+
     }
 }
